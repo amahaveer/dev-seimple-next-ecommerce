@@ -5,10 +5,11 @@ import { toggleFavProduct } from 'store/reducers/user';
 import { RootState } from 'store';
 import { ProductTypeList } from 'types';
 
-const ProductItem = ({ discount, images, id, name, price, currentPrice }: ProductTypeList) => {
+const ProductItem = ({ discount, img, images, id, name, price, currentPrice }: ProductTypeList) => {
   const dispatch = useDispatch();
   const { favProducts } = useSelector((state: RootState) => state.user);
-
+console.log('ProductItem --- > images : '+images);
+console.log('ProductItem --- > name : '+name);
   const isFavourite = some(favProducts, productId => productId === id);
 
   const toggleFav = () => {
@@ -26,9 +27,9 @@ const ProductItem = ({ discount, images, id, name, price, currentPrice }: Produc
 
         <Link href={`/product/${id}`}>
           <a>
-            <img src={images ? images[0] : ''} alt="product" />
+            <img src={img ? img : ''} alt="product" />
             {discount && 
-              <span className="product__discount">{discount}%</span>
+              <span className="product__discount">{discount}</span>
             }
           </a>
         </Link>

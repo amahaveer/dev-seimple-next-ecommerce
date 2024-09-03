@@ -1,26 +1,25 @@
 import { useState } from 'react';
 import productsColors from './../../../utils/data/products-colors';
-import productsSizes from './../../../utils/data/products-sizes';
+//import productsSizes from './../../../utils/data/products-sizes';
 import CheckboxColor from './../../products-filter/form-builder/checkbox-color';
 import { useDispatch, useSelector } from 'react-redux';
 import { some } from 'lodash';
 import { addProduct } from 'store/reducers/cart';
 import { toggleFavProduct } from 'store/reducers/user';
-import { ProductType, ProductStoreType } from 'types';
+import { ProductStoreType } from 'types';
 import { RootState } from 'store';
 
-type ProductContent = {
+/*type ProductContent = {
   product: ProductType;
-}
+}*/
 
-const Content = ({ product }: ProductContent) => {
+const Content = ({ product }: any) => {
   const dispatch = useDispatch();
   const [count, setCount] = useState<number>(1);
   const [color, setColor] = useState<string>('');
-  const [itemSize, setItemSize] = useState<string>('');
-
+  //const [itemSize, setItemSize] = useState<string>('');
   const onColorSet = (e: string) => setColor(e);
-  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => setItemSize(e.target.value);
+  //const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => setItemSize(e.target.value);
 
   const { favProducts } = useSelector((state: RootState) => state.user);
   const isFavourite = some(favProducts, productId => productId === product.id);
@@ -41,7 +40,7 @@ const Content = ({ product }: ProductContent) => {
       price: product.currentPrice,
       count: count,
       color: color,
-      size: itemSize
+      size: '1'
     }
 
     const productStore = {
@@ -57,13 +56,11 @@ const Content = ({ product }: ProductContent) => {
       <div className="product-content__intro">
         <h5 className="product__id">Product ID:<br></br>{product.id}</h5>
         <span className="product-on-sale">Sale</span>
-        <h2 className="product__name">{product.name}</h2>
+        <h2 className="product__name">{product.masterData?.current?.name['en-US']}</h2>
 
         <div className="product__prices">
-          <h4>${ product.currentPrice }</h4>
-          {product.discount &&
-            <span>${ product.price }</span>
-          }
+          <h4>${ product.masterData?.current?.masterVariant?.prices[0]?.value.centAmount}</h4>
+          
         </div>
       </div>
 
@@ -83,19 +80,7 @@ const Content = ({ product }: ProductContent) => {
             ))}
           </div>
         </div>
-        <div className="product-filter-item">
-          <h5>Size: <strong>See size table</strong></h5>
-          <div className="checkbox-color-wrapper">
-            <div className="select-wrapper">
-              <select onChange={onSelectChange}>
-                <option>Choose size</option>
-                {productsSizes.map(type => (
-                  <option value={type.label}>{type.label}</option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
+        
         <div className="product-filter-item">
           <h5>Quantity:</h5>
           <div className="quantity-buttons">
